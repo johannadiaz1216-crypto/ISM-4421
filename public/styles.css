@@ -1,3 +1,5 @@
+/* Themes: light by default, dark via data-theme="dark", or follow the OS when
+   data-theme="system" (set by theme.js before first paint). */
 :root {
   --fau-blue: #003366;
   --fau-blue-dark: #00264d;
@@ -8,18 +10,42 @@
   --text: #1a2433;
   --muted: #5b6676;
   --border: #d9e0ea;
+  --heading: #003366;
+  --temp: #003366;
+  --pop: #2a7bd5;
+  --welcome-bg: linear-gradient(135deg, #ffffff 0%, #e6eef8 100%);
   --radius: 14px;
   --shadow: 0 4px 18px rgba(0, 51, 102, 0.08);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0b1626;
+  --card: #12223a;
+  --text: #e8eef7;
+  --muted: #9fb0c6;
+  --border: #22385a;
+  --heading: #8db4e3;
+  --temp: #ffffff;
+  --pop: #6fb2ff;
+  --welcome-bg: linear-gradient(135deg, #12223a 0%, #1a3152 100%);
+  --shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
     --bg: #0b1626;
     --card: #12223a;
     --text: #e8eef7;
     --muted: #9fb0c6;
     --border: #22385a;
+    --heading: #8db4e3;
+    --temp: #ffffff;
+    --pop: #6fb2ff;
+    --welcome-bg: linear-gradient(135deg, #12223a 0%, #1a3152 100%);
     --shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+    color-scheme: dark;
   }
 }
 
@@ -77,6 +103,9 @@ a { color: inherit; }
   padding: 9px 12px;
   border-radius: 999px;
   border: 2px solid transparent;
+  background: #fff;
+  color: #1a2433;
+  color-scheme: light;
   font-size: 0.95rem;
   outline: none;
 }
@@ -121,6 +150,26 @@ a { color: inherit; }
 .btn-accent { background: var(--fau-red); border-color: var(--fau-red); font-weight: 700; }
 .btn-accent:hover { background: #a80000; }
 
+/* Theme switcher */
+.theme-switch {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  padding: 2px;
+}
+.theme-switch button {
+  background: transparent;
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.theme-switch button:hover { background: rgba(255, 255, 255, 0.15); }
+.theme-switch button[aria-checked="true"] { background: #fff; color: var(--fau-blue); font-weight: 600; }
+
 /* Main */
 main {
   flex: 1;
@@ -146,14 +195,23 @@ main {
 }
 .card h3 {
   margin: 0 0 12px;
-  color: var(--fau-blue);
+  color: var(--heading);
   font-size: 1.05rem;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
-@media (prefers-color-scheme: dark) {
-  .card h3 { color: #8db4e3; }
+
+.welcome {
+  background: var(--welcome-bg);
+  border-left: 6px solid var(--fau-red);
 }
+.welcome h2 {
+  margin: 0 0 4px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.6rem;
+  color: var(--heading);
+}
+.welcome p { margin: 0; color: var(--muted); }
 
 .muted { color: var(--muted); margin: 0; }
 
@@ -166,10 +224,7 @@ main {
 .current h2 { margin: 0; font-size: 1.4rem; }
 .current-temp { display: flex; align-items: center; gap: 12px; margin: 12px 0 4px; }
 .icon-lg { font-size: 3.5rem; line-height: 1; }
-.temp-lg { font-size: 3.5rem; font-weight: 700; color: var(--fau-blue); }
-@media (prefers-color-scheme: dark) {
-  .temp-lg { color: #fff; }
-}
+.temp-lg { font-size: 3.5rem; font-weight: 700; color: var(--temp); }
 .current-desc { margin: 0; font-size: 1.15rem; font-weight: 600; }
 
 .stats {
@@ -206,7 +261,7 @@ main {
 .hour .h-time { font-size: 0.8rem; color: var(--muted); }
 .hour .h-icon { font-size: 1.6rem; margin: 4px 0; }
 .hour .h-temp { font-weight: 700; }
-.hour .h-pop { font-size: 0.75rem; color: #2a7bd5; min-height: 1em; }
+.hour .h-pop { font-size: 0.75rem; color: var(--pop); min-height: 1em; }
 
 /* Daily */
 .daily { list-style: none; margin: 0; padding: 0; }
@@ -222,7 +277,7 @@ main {
 .day .d-name { font-weight: 600; }
 .day .d-icon { font-size: 1.5rem; text-align: center; }
 .day .d-desc { color: var(--muted); font-size: 0.9rem; }
-.day .d-pop { color: #2a7bd5; font-size: 0.85rem; text-align: right; }
+.day .d-pop { color: var(--pop); font-size: 0.85rem; text-align: right; }
 .day .d-temps { text-align: right; }
 .day .d-hi { font-weight: 700; }
 .day .d-lo { color: var(--muted); margin-left: 8px; }

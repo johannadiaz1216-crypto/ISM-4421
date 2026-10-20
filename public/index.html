@@ -7,6 +7,7 @@
   <meta name="description" content="Florida Atlantic University weather forecast, powered by Open-Meteo. Defaults to Boca Raton, FL.">
   <meta name="theme-color" content="#003366">
   <link rel="icon" href="assets/fau-logo.svg" type="image/svg+xml">
+  <script src="theme.js"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -27,10 +28,20 @@
       <button id="locate-btn" class="btn" type="button" title="Use my location">📍 My location</button>
       <button id="boca-btn" class="btn" type="button" title="Back to Boca Raton">🦉 Boca</button>
       <button id="unit-btn" class="btn btn-accent" type="button" aria-pressed="false">°F</button>
+      <div class="theme-switch" role="radiogroup" aria-label="Color theme">
+        <button type="button" role="radio" data-theme-option="light" aria-checked="false" title="Light theme">☀️ Light</button>
+        <button type="button" role="radio" data-theme-option="dark" aria-checked="false" title="Dark theme">🌙 Dark</button>
+        <button type="button" role="radio" data-theme-option="system" aria-checked="false" title="Match your device">💻 System</button>
+      </div>
     </div>
   </header>
 
   <main>
+    <section class="card welcome" aria-live="polite">
+      <h2 id="welcome-title">Welcome, Johanna! 🦉</h2>
+      <p id="welcome-text">Here's your weather.</p>
+    </section>
+
     <p id="status" class="status" role="status" aria-live="polite">Loading forecast…</p>
 
     <section id="current" class="card current" hidden>

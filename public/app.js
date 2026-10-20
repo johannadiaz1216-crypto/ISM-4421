@@ -47,6 +47,8 @@ const UNITS = {
   metric: { temp: "celsius", wind: "kmh", precip: "mm", tempLabel: "°C", windLabel: "km/h", precipLabel: "mm" },
 };
 
+const USER_NAME = "Johanna";
+
 const $ = (id) => document.getElementById(id);
 
 const state = {
@@ -174,12 +176,44 @@ function render(data) {
   $("stat-sun").textContent =
     `${fmtTime.format(parseLocal(data.daily.sunrise[0]))} / ${fmtTime.format(parseLocal(data.daily.sunset[0]))}`;
 
+  renderWelcome(data, u, now);
   renderHourly(data, u);
   renderDaily(data);
 
   for (const id of ["current", "hourly-card", "daily-card"]) $(id).hidden = false;
   setStatus("");
   document.title = `${round(c.temperature_2m)}${u.tempLabel} ${state.place.name} | Owl Weather`;
+}
+
+function greeting() {
+  const hour = new Date().getHours();
+  if (hour < 5) return ["Up late", "🌙"];
+  if (hour < 12) return ["Good morning", "☀️"];
+  if (hour < 17) return ["Good afternoon", "🌤️"];
+  if (hour < 21) return ["Good evening", "🌆"];
+  return ["Good night", "🌙"];
+}
+
+function weatherTip(data) {
+  const c = data.current;
+  const pop = data.daily.precipitation_probability_max[0] || 0;
+  const uv = data.daily.uv_index_max[0] || 0;
+  const hotF = state.units === "imperial" ? 90 : 32;
+  const coldF = state.units === "imperial" ? 55 : 13;
+  if (c.weather_code >= 95) return "Thunderstorms around. Stay safe getting to class! ⛈️";
+  if (pop >= 50) return `${pop}% chance of rain today. Grab an umbrella! ☔`;
+  if (c.apparent_temperature >= hotF) return "It's a hot one. Stay hydrated! 💧";
+  if (c.apparent_temperature <= coldF) return "Chilly out there. Bring a jacket! 🧥";
+  if (uv >= 8) return "UV is very high today. Don't forget sunscreen! 🧴";
+  return "Have a great day, Owl! 🦉";
+}
+
+function renderWelcome(data, u, now) {
+  const [hello, emoji] = greeting();
+  $("welcome-title").textContent = `${hello}, ${USER_NAME}! ${emoji}`;
+  $("welcome-text").textContent =
+    `It's ${round(data.current.temperature_2m)}${u.tempLabel} and ${now.text.toLowerCase()} in ${state.place.name}. ` +
+    weatherTip(data);
 }
 
 function uvLabel(uv) {
@@ -359,9 +393,27 @@ function setupSearch() {
   input.addEventListener("blur", close);
 }
 
+/* ---------- theme ---------- */
+
+function setupTheme() {
+  const buttons = document.querySelectorAll("[data-theme-option]");
+  const apply = (theme) => {
+    document.documentElement.setAttribute("data-theme", theme);
+    buttons.forEach((b) => b.setAttribute("aria-checked", String(b.dataset.themeOption === theme)));
+  };
+  apply(document.documentElement.getAttribute("data-theme") || "system");
+  buttons.forEach((b) => b.addEventListener("click", () => {
+    apply(b.dataset.themeOption);
+    localSet("owlweather.theme", b.dataset.themeOption);
+  }));
+}
+
 /* ---------- init ---------- */
 
 function init() {
+  const [hello, emoji] = greeting();
+  $("welcome-title").textContent = `${hello}, ${USER_NAME}! ${emoji}`;
+  setupTheme();
   updateUnitButton();
   setupSearch();
 

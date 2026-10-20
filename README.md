@@ -10,7 +10,9 @@ A weather app with Florida Atlantic University branding. It gets its data from t
 - "My location" button that uses browser geolocation, and a "Boca" button to return to campus
 - °F / °C toggle
 - Remembers your last city and units
-- Responsive layout with dark mode
+- Light, Dark and System (follows your device) themes, remembered between visits
+- Personalized welcome message for Johanna with a time-of-day greeting and a weather tip
+- Responsive layout
 
 ## Project structure
 ```
@@ -18,6 +20,7 @@ public/            # the deployed site (static, no build step)
   index.html
   styles.css
   app.js
+  theme.js         # applies the saved theme before first paint
   assets/fau-logo.svg
 netlify.toml       # Netlify config: publish dir + security headers
 ```
