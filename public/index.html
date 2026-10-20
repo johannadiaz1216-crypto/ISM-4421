@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Owl Weather | FAU</title>
+  <meta name="description" content="Florida Atlantic University weather forecast, powered by Open-Meteo. Defaults to Boca Raton, FL.">
+  <meta name="theme-color" content="#003366">
+  <link rel="icon" href="assets/fau-logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <img src="assets/fau-logo.svg" alt="FAU logo" class="logo" width="56" height="56">
+      <div>
+        <h1>Owl Weather</h1>
+        <p class="tagline">Florida Atlantic University</p>
+      </div>
+    </div>
+    <div class="controls">
+      <form id="search-form" class="search" autocomplete="off" role="search">
+        <label for="search-input" class="visually-hidden">Search for a city</label>
+        <input id="search-input" type="search" placeholder="Search a city…" aria-autocomplete="list" aria-controls="search-results">
+        <ul id="search-results" class="search-results" role="listbox" hidden></ul>
+      </form>
+      <button id="locate-btn" class="btn" type="button" title="Use my location">📍 My location</button>
+      <button id="boca-btn" class="btn" type="button" title="Back to Boca Raton">🦉 Boca</button>
+      <button id="unit-btn" class="btn btn-accent" type="button" aria-pressed="false">°F</button>
+    </div>
+  </header>
+
+  <main>
+    <p id="status" class="status" role="status" aria-live="polite">Loading forecast…</p>
+
+    <section id="current" class="card current" hidden>
+      <div class="current-main">
+        <div>
+          <h2 id="place-name">Boca Raton, Florida</h2>
+          <p id="updated" class="muted"></p>
+        </div>
+        <div class="current-temp">
+          <span id="current-icon" class="icon-lg" aria-hidden="true"></span>
+          <span id="current-temp" class="temp-lg"></span>
+        </div>
+        <p id="current-desc" class="current-desc"></p>
+        <p id="current-feels" class="muted"></p>
+      </div>
+      <dl class="stats">
+        <div><dt>Humidity</dt><dd id="stat-humidity"></dd></div>
+        <div><dt>Wind</dt><dd id="stat-wind"></dd></div>
+        <div><dt>Precip.</dt><dd id="stat-precip"></dd></div>
+        <div><dt>Pressure</dt><dd id="stat-pressure"></dd></div>
+        <div><dt>UV index</dt><dd id="stat-uv"></dd></div>
+        <div><dt>Sunrise / Sunset</dt><dd id="stat-sun"></dd></div>
+      </dl>
+    </section>
+
+    <section class="card" id="hourly-card" hidden>
+      <h3>Next 24 hours</h3>
+      <div id="hourly" class="hourly"></div>
+    </section>
+
+    <section class="card" id="daily-card" hidden>
+      <h3>7-day forecast</h3>
+      <ul id="daily" class="daily"></ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Go Owls! 🦉 Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0).</p>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
